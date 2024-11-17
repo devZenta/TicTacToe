@@ -36,6 +36,22 @@ int victoryCheck(char gameBoard[3][3]) {
     return result;
 }
 
+/*
+ * 0 : non null
+ * 1 : null
+*/
+
+int checkNull(char gameBoard[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (gameBoard[i][j] == '.') {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
 //Fonction affichage du tableau
 void displayGameBoard(char tab[3][3]) {
     for (int i = 0; i < 3; i++) {
@@ -53,40 +69,113 @@ void displayGameBoard(char tab[3][3]) {
     printf("\n");
 }
 
+//Fonction qui lance le jeu
+void play(char gameBoard[3][3], char users[2][50]) {
+    int nbTurns = 0;
+    int player = 0;
+    int line;
+    int column;
+    char currentPlayer;
+
+    while (1) {
+
+        nbTurns++;
+        currentPlayer = (player == 0) ? 'X' : 'O';
+
+        printf("-------------------------------------------------");
+        printf("\n");
+        printf("              %s it's your turn", users[player]);
+        printf("\n");
+        printf("-------------------------------------------------");
+        printf("\n");
+        displayGameBoard(gameBoard);
+
+        while (1) {
+
+            printf("\n");
+            printf("Which line ?");
+            printf("\n");
+            scanf("%d", &line);
+            printf("which column ");
+            printf("\n");
+            scanf("%d", &column);
+            printf("\n");
+
+            if (line < 1 || line > 3 || column < 1 || column > 3) {
+                printf("Invalid position! Please choose a line and column between 1 and 3.\n");
+                continue;
+            }
+
+            line--;
+            column--;
+
+            if (gameBoard[line][column] != '.') {
+                printf("This cell is already occupied! Try again.\n");
+                continue;
+            }
+
+            gameBoard[line][column] = currentPlayer;
+            break;
+        }
+
+        if (victoryCheck(gameBoard)) {
+            displayGameBoard(gameBoard);
+            printf("Congratulations %s, you won in %d turns!\n", users[player], nbTurns);
+            break;
+        }
+
+        if (checkNull(gameBoard)) {
+            displayGameBoard(gameBoard);
+            printf("It's a null! No winner this time.\n");
+            break;
+        }
+
+        player = (player == 0) ? 1 : 0;
+    }
+}
+
 int main(void) {
 
-    printf("----------------- Configuration -----------------");
-    printf("\n");
+    int playAgain = 1;
 
-    //Création du tableau
-    char gameBoard[3][3];
+    while (playAgain) {
 
-    //Initialisation du tableau
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            gameBoard[i][j] = '.';
-        }
-    }
-
-    int nbPlayers = 2;
-
-    //Création d'une liste pour stock le pseudo des joueurs
-    char usernames[nbPlayers][50];
-
-    //Récupération des pseudos avec ajout dans la liste
-    for (int i = 0; i < nbPlayers; i++) {
-        printf("Username of player %d ?", i + 1);
+        printf("----------------- Configuration -----------------");
         printf("\n");
-        scanf("%49s", usernames[i]);
+
+        //Création du tableau
+        char gameBoard[3][3];
+
+        //Initialisation du tableau
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                gameBoard[i][j] = '.';
+            }
+        }
+
+        int nbPlayers = 2;
+
+        //Création d'une liste pour stock le pseudo des joueurs
+        char usernames[nbPlayers][50];
+
+        //Récupération des pseudos avec ajout dans la liste
+        for (int i = 0; i < nbPlayers; i++) {
+            printf("Username of player %d ?", i + 1);
+            printf("\n");
+            scanf("%49s", usernames[i]);
+        }
+
+        printf("\n");
+        printf("------------------ Game Start -------------------");
+
+        printf("\n");
+        displayGameBoard(gameBoard);
+        play(gameBoard, usernames);
+
+        //Relancer une partie
+        printf("Do you want to play again? (1 = Yes, 0 = No): ");
+        scanf("%d", &playAgain);
     }
-
-    printf("\n");
-    printf("------------------ Game Start -------------------");
-
-    printf("\n");
-    displayGameBoard(gameBoard);
-
-
 
     return 0;
 }
