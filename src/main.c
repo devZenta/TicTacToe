@@ -5,7 +5,6 @@
  * 1 : win
 */
 
-//Fonction vérification de la victoire
 int victoryCheck(char gameBoard[3][3]) {
     int result = 0;
 
@@ -52,7 +51,6 @@ int checkNull(char gameBoard[3][3]) {
     return 1;
 }
 
-//Fonction affichage du tableau
 void displayGameBoard(char tab[3][3]) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -69,7 +67,6 @@ void displayGameBoard(char tab[3][3]) {
     printf("\n");
 }
 
-//Fonction qui lance le jeu
 void play(char gameBoard[3][3], char users[2][50]) {
     int nbTurns = 0;
     int player = 0;
@@ -79,7 +76,6 @@ void play(char gameBoard[3][3], char users[2][50]) {
 
     while (1) {
 
-        nbTurns++;
         currentPlayer = (player == 0) ? 'X' : 'O';
 
         printf("-------------------------------------------------");
@@ -120,7 +116,7 @@ void play(char gameBoard[3][3], char users[2][50]) {
 
         if (victoryCheck(gameBoard)) {
             displayGameBoard(gameBoard);
-            printf("Congratulations %s, you won in %d turns!\n", users[player], nbTurns);
+            printf("Congratulations %s, you won!\n", users[player]);
             break;
         }
 
@@ -143,10 +139,8 @@ int main(void) {
         printf("----------------- Configuration -----------------");
         printf("\n");
 
-        //Création du tableau
         char gameBoard[3][3];
 
-        //Initialisation du tableau
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 gameBoard[i][j] = '.';
@@ -155,10 +149,8 @@ int main(void) {
 
         int nbPlayers = 2;
 
-        //Création d'une liste pour stock le pseudo des joueurs
         char usernames[nbPlayers][50];
 
-        //Récupération des pseudos avec ajout dans la liste
         for (int i = 0; i < nbPlayers; i++) {
             printf("Username of player %d ?", i + 1);
             printf("\n");
@@ -172,7 +164,6 @@ int main(void) {
         displayGameBoard(gameBoard);
         play(gameBoard, usernames);
 
-        //Relancer une partie
         printf("Do you want to play again? (1 = Yes, 0 = No): ");
         scanf("%d", &playAgain);
     }
